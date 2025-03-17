@@ -4,7 +4,7 @@ function App() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:5000/")
+    fetch(`${import.meta.env.VITE_API_URL}/`)
       .then((res) => res.json())
       .then((data) => setMessage(data.message));
   }, []);
