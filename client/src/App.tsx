@@ -1,17 +1,21 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 function App() {
-  const [message, setMessage] = useState("");
+  const [images, setImages] = useState([]);
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/images?query=art`)
-      .then((res) => res.json())
-      .then((data) => setMessage(data.message));
+    axios
+      .get(`${import.meta.env.VITE_API_URL}/api/images?query=art`)
+      .then((res) => setImages(res.data.photos))
+      .catch((error) => console.error("Error al obtener imágenes", error));
   }, []);
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <h1 className="text-3xl font-bold text-blue-500">{message}</h1>
+    <div className="flex flex-wrap justify-center gap-4 p-4">
+      {images.map((img) => (
+        <img key={img.id} src={img.src.medium} alt={img.photographer} className="rounded-lg shadow-lg" />
+      ))}
     </div>
   );
 }
