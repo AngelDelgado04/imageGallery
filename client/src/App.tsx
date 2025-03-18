@@ -4,7 +4,7 @@ function App() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/`)
+    fetch(`${import.meta.env.VITE_API_URL}/images?query=art`)
       .then((res) => res.json())
       .then((data) => setMessage(data.message));
   }, []);
