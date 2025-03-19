@@ -1,17 +1,47 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
+import Navbar from "./components/Navbar";
+import ImageGallery from "./components/ImageGallery";
+import Footer from "./components/Footer";
 
 function App() {
-  const [message, setMessage] = useState("");
+  const [images, setImages] = useState<
+    Array<{ id: number; src: { medium: string }; alt: string }>
+  >([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:5000/")
-      .then((res) => res.json())
-      .then((data) => setMessage(data.message));
+    setLoading(true);
+    axios
+      .get(`${import.meta.env.VITE_API_URL}/api/images?query=fascism`)
+      .then((res) => {
+        setImages(res.data.photos);
+        setError("");
+      })
+      .catch((error) => {
+        console.error("Error obtaining images.", error);
+        setError("The images could not be loaded. Please try again later.");
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <h1 className="text-3xl font-bold text-blue-500">{message}</h1>
+    <div className="flex flex-col min-h-screen">
+      <Navbar />
+        <main className="flex-1 pt-16 px-4">
+        {loading ? (
+          <div className="flex justify-center">
+            <p className="text-center text-lg text-secundary pr-4">Loading images</p>
+            <span className="loading loading-spinner text-accent"></span>
+          </div>
+        ) : error ? (
+          <p className="text-center text-red-500">{error}</p>
+        ) : (
+          <ImageGallery images={images} />
+        )}
+      </main>
+      <Footer />
     </div>
   );
 }
