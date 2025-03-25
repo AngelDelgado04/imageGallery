@@ -1,5 +1,4 @@
 const express = require("express");
-const axios = require("axios");
 require("dotenv").config();
 
 const router = express.Router();
@@ -10,14 +9,18 @@ router.get("/images", async (req, res) => {
   try {
     const query = req.query.query || "art";
 
-    const response = await axios.get("https://api.pexels.com/v1/search", {
+    const response = await fetch(`https://api.pexels.com/v1/search?query=${query}&per_page=12`, {
       headers: { Authorization: API_KEY },
-      params: { query, per_page: 10 },
     });
 
-    res.json(response.data);
+    if (!response.ok) {
+      throw new Error(`Error in Pexels API: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    res.json(data);
   } catch (error) {
-    console.error("Error al obtener imágenes:", error.message);
+    console.error("Error obtaining images:", error.message);
     res.status(500).json({ error: "Server internal error" });
   }
 });

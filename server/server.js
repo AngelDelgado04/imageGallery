@@ -5,8 +5,13 @@ require("dotenv").config();
 const app = express();
 const imagesRoutes = require("./routes/imagesRoutes");
 
+const SERVER_URL = process.env.SERVER_URL;
+const CLIENT_URL = process.env.CLIENT_URL;
+
 app.use(cors({
-  origin: ["http://localhost:5173"]
+  origin: [CLIENT_URL],
+  methods: ["GET"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 app.use(express.json());
 
@@ -15,7 +20,7 @@ app.get("/", (req, res) => {
 });
 
 app.use((req, res, next) => {
-  const allowedOrigins = ["http://localhost:5173"];
+  const allowedOrigins = [CLIENT_URL];
   if (!allowedOrigins.includes(req.headers.origin)) {
     return res.status(403).json({ error: "Acceso no autorizado" });
   }
@@ -24,5 +29,5 @@ app.use((req, res, next) => {
 
 app.use("/api", imagesRoutes);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`Servidor corriendo en el puerto ${PORT}`));
