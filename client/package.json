@@ -11,14 +11,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.14",
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-    "axios": "^1.8.3",
-=======
-=======
->>>>>>> Stashed changes
     "daisyui": "^5.0.6",
->>>>>>> Stashed changes
     "dotenv": "^16.4.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
